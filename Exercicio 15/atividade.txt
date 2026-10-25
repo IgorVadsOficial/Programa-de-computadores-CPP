@@ -1,0 +1,10 @@
+Contextualização: Em sistemas de processamento digital de imagens, uma imagem em tons de cinza pode ser representada como uma matriz bidimensional, onde cada elemento (pixel) possui um valor inteiro de 0 (preto total) a 255 (branco total). Um formato de arquivo muito simples para armazenar essas imagens é o PGM (Portable Graymap) em modo texto, onde as primeiras linhas contêm metadados (como dimensões) e as linhas seguintes contêm os valores dos pixels.
+
+Enunciado: Imagine que você recebeu um arquivo chamado imagem.txt. A primeira linha desse arquivo contém dois inteiros: o número de linhas e o número de colunas da imagem. As linhas subsequentes contêm os valores dos pixels separados por espaços.
+Escreva um programa em C++ que:
+
+Abra o arquivo imagem.txt para leitura.
+Leia as dimensões da matriz (linhas e colunas).
+Aloque ou declare uma matriz dinâmica/estática apropriada e preencha-a com os dados do arquivo.
+Calcule e exiba a média do valor dos pixels da imagem.
+Feche o arquivo de forma segura.

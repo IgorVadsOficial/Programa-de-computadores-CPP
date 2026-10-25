@@ -1,0 +1,21 @@
+Questão 1
+Contexto: Uma autopeças precisa monitorar o estoque de 5 produtos essenciais.
+Escreva um programa que:Receba e armazene em um vetor o nome de 5 produtos.Receba e armazene em um segundo vetor a quantidade em estoque de cada um desses produtos (garanta que as posições dos vetores se relacionem).Calcule e exiba a média geral de itens no estoque.Ao final, exiba uma lista contendo apenas os produtos que estão abaixo da média calculada. Para cada um desses produtos abaixo da média, aplique a seguinte regra de negócio:
+Se a quantidade em estoque for menor que 5, exiba ao lado do nome: "Status: Reposição Urgente".
+
+Caso contrário, exiba: "Status: Reposição Recomendada".
+Questão 2: Mapeamento de Terreno
+Conceitos avaliados: Matrizes, Estrutura de Repetição Aninhada e Estrutura Condicional.
+Contexto: Uma equipe de topografia mapeou uma região em uma grade de $4 \times 4$ quadrantes. Cada célula da matriz armazena a altitude (em metros) daquele ponto.
+Crie um algoritmo que:Solicite ao usuário a altitude de cada um dos 16 pontos e preencha uma matriz $4x4$.Identifique e exiba o maior valor de altitude presente apenas na diagonal principal da matriz.Conte e exiba quantos pontos do terreno possuem altitude negativa (abaixo do nível do mar).
+
+Questão 3: Sistema de Avaliação de Festival
+Conceitos avaliados (Integração): Matrizes, Vetores, Estrutura de Repetição com validação e Estrutura Condicional.
+Contexto: Em um festival de cinema, 3 jurados avaliam 4 filmes participantes. As notas dadas variam de 0 a 10.
+Desenvolva um sistema que:Preencha uma matriz $3x4$ onde as linhas representam os jurados e as colunas representam os filmes.
+Validação obrigatória: O programa só deve aceitar notas entre 0 e 10. Caso o jurado digite um valor inválido, o programa deve exigir que ele digite novamente até fornecer uma nota válida.
+
+Calcule a nota média de cada um dos 4 filmes (a média das notas dos 3 jurados para aquele filme) e armazene os resultados em um vetor de tamanho 4.Ao final, exiba:
+A média de cada filme.
+O número (índice) do filme que obteve a maior média (considerado o campeão do festival).
+Se algum filme obteve média final menor que 5.0, exiba o alerta: "Atenção: Filme X não atingiu a nota mínima de exibição." (substituindo X pelo número do filme).

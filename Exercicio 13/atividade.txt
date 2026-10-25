@@ -1,0 +1,70 @@
+#include <iostream>
+#include <fstream>
+#include <string>
+
+int main() {
+    std::ifstream arquivo("meu_arquivo.txt"); // Abre o arquivo em modo leitura
+
+    if (!arquivo.is_open()) {
+        std::cerr << "Erro ao abrir o arquivo!\n";
+        return 1;
+    }
+
+    std::string linha;
+    while (std::getline(arquivo, linha)) {
+        std::cout << linha << std::endl;
+    }
+
+    arquivo.close();
+    return 0;
+}
+
+
+
+#include <iostream>
+#include <fstream>
+
+int main() {
+    std::ofstream arquivo("meu_arquivo.txt"); // Abre o arquivo em modo escrita (sobrescreve)
+    std::ofstream arquivo("meu_arquivo.txt",std::ios::app); // Sem sobrescrever o arquivo
+
+
+    if (!arquivo.is_open()) {
+        std::cerr << "Erro ao abrir o arquivo!\n";
+        return 1;
+    }
+
+    arquivo << "Esta é a primeira linha do meu arquivo.\n";
+    arquivo << "E esta é a segunda linha.\n";
+
+    arquivo.close();
+    return 0;
+}
+
+#include <iostream>
+#include <string>
+#include <sstream>
+#include <vector>
+
+int main() {
+    std::string texto = "maçã,banana,laranja,uva";
+    std::stringstream ss(texto);
+    std::string item;
+    std::vector<std::string> itens;
+
+    // Divide a string com base no delimitador ','
+    while (std::getline(ss, item, ',')) {
+        cout << item;
+    }
+
+
+    return 0;
+}
+
+Crie um programa em C++ que permita ao usuário realizar as seguintes operações em uma agenda telefônica armazenada em um arquivo TXT chamado "agenda.txt": O usuário informa o nome e o número de telefone do contato, e o programa adiciona essa informação ao arquivo. 
+O programa lê o arquivo "agenda.txt" e exibe todos os contatos (nome e telefone) na tela. 
+O usuário informa o nome de um contato, e o programa busca essa informação no arquivo e exibe o número de telefone correspondente, se encontrado. Realizar a busca pelo nome também. 
+
+1 - Cadastrar novos contatos na agenda;
+2 - Buscar contato pelo telefone;
+3 - Buscar contato pelo nome;

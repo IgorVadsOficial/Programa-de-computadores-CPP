@@ -1,0 +1,56 @@
+Questão 1: Funções e Vetores - Gestão de Inventário
+
+**Contexto:** Uma pequena loja de peças de computador precisa atualizar os preços de seu estoque devido à inflação.
+
+**Enunciado:**
+Escreva uma função chamada `aplicarInflacao` que receba como parâmetros:
+1. Um vetor de números reais (`double`) representando os preços dos produtos;
+2. O tamanho desse vetor;
+3. Um valor percentual de reajuste (por exemplo, `5.5` para 5,5%).
+
+A função deve modificar diretamente os valores do vetor original (lembre-se de como vetores são passados para funções em C++).
+
+Em seguida, faça um breve exemplo de uso na função `main` criando um vetor com 3 produtos e aplicando um reajuste de 10%. Cole seu código completo na resposta.
+
+
+Questão 2: Funções e Vetores - Validação de Sensores IoT
+**Contexto:** Em um sistema de monitoramento ambiental, um sensor coleta temperaturas a cada hora e as armazena em um vetor de inteiros. Devido a falhas ocasionais, o sensor pode registrar leituras erráticas muito abaixo de zero absoluto (valores como `-999`).
+
+**Enunciado:**
+Escreva uma função chamada `calcularMediaValida` que receba esse vetor de temperaturas e o seu tamanho.
+
+A função deve calcular e retornar a média aritmética (como `double`) apenas das temperaturas que forem maiores ou iguais a -40 graus. Valores inferiores a isso são ruídos e devem ser completamente ignorados no cálculo da média (tanto na soma quanto na contagem de elementos válidos). Cole o código da sua função e a lógica utilizada.
+
+Questão 3: Funções e Vetores - Análise de Dados de Vendas
+**Contexto:** Uma empresa registrou o total de vendas diárias de um mês em um vetor. Eles desejam identificar os dias de melhor desempenho.
+
+**Enunciado:**
+Escreva uma função em C++ que receba o vetor de vendas e o seu tamanho, e exiba na tela todos os **índices (dias)** cujo valor de venda ficou acima da média mensal da empresa.
+
+*Nota: Sua função precisará calcular a média do vetor primeiro para, em um segundo momento, identificar quais dias superaram esse valor.* Cole seu código na resposta.
+
+
+Questão 4 : Funções e Vetores - Processamento de Sinais/Áudio
+**Contexto:** Em sistemas de processamento de áudio digital, é comum a necessidade de remover ruídos isolados conhecidos como "cliques". Uma técnica simples consiste em substituir um valor discrepante pela média dos seus vizinhos imediatos.
+
+**Enunciado:**
+Escreva uma função chamada `filtrarSinal` que receba um vetor de inteiros representando as amostras do sinal e o seu tamanho. A função deve varrer o vetor a partir do segundo elemento até o penúltimo.
+
+Se um elemento atual for maior do que o dobro do elemento anterior **E** também maior do que o dobro do elemento posterior, ele é considerado um ruído. Substitua esse elemento pela média aritmética simples entre o seu vizinho esquerdo e o seu vizinho direito.
+
+**Responda obrigatoriamente:**
+1. Apresente o código da função em C++.
+
+2. Explique textualmente o impacto de tentar aplicar essa validação no primeiro (índice 0) e no último elemento do vetor, e como você tratou essa restrição no seu código para evitar erros de leitura de memória.
+
+
+Questão 5 : Funções e Vetores - Logística e Rotas
+**Contexto:** Uma empresa de logística armazena o histórico de distâncias percorridas por um caminhão. Para otimizar o planejamento, eles precisam remover duplicatas **consecutivas** de distâncias causadas por erros de reenvio do GPS (exemplo: se o vetor for `{10, 20, 20, 30, 10, 10, 40}`, o vetor limpo deve se tornar `{10, 20, 30, 10, 40}`).
+
+**Enunciado:**
+Escreva uma função chamada `removerDuplicatasConsecutivas` que receba o vetor original e o seu tamanho. Como não podemos alterar o tamanho de vetores estáticos em tempo de execução, sua função deve:
+1. Reorganizar os elementos dentro do próprio vetor original, trazendo os elementos únicos e consecutivos para o início dele.
+2. Retornar um número inteiro que representa o "novo tamanho" útil do vetor.
+
+**O que deve ser entregue:**
+1. Um único arquivo com seu nome .cp
