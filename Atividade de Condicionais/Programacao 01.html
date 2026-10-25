@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aula 01 — Introdução ao C++ | IFRN</title>
+<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600;700;800;900&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --if-verde:#2f9e41; --if-vermelho:#cd191e;
+  --ifrn-verde:#539839; --ifrn-vermelho:#b93120;
+  --bg:#0a0a0a; --bg2:#111111; --bg3:#1a1a1a; --bg-dest:#1a2236;
+  --txt:#e8e8e8; --txt2:#aaaaaa; --txt3:#888888; --tit:#ffffff;
+  --ac:#2f9e41; --ac2:#539839; --verm:#E53935;
+  --brd:#2a2a2a; --rad:10px; --trans:0.3s ease;
+  --fonte:'Raleway',sans-serif; --mono:'Fira Code','Consolas',monospace;
+  --cab-h:50px; --sidebar-w:240px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:var(--fonte);background:var(--bg);color:var(--txt);overflow:hidden;height:100vh;}
+::selection{background:var(--ac);color:#fff;}
+
+.barra-if{position:fixed;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--if-verde) 0%,var(--if-verde) 85%,var(--if-vermelho) 85%);z-index:300;}
+.cab{position:fixed;top:4px;left:0;right:0;display:flex;align-items:center;gap:12px;padding:6px 20px;background:var(--bg2);border-bottom:1px solid var(--brd);z-index:200;height:calc(var(--cab-h) - 4px);}
+.cab img{height:30px;background:#fff;padding:2px 4px;border-radius:3px;}
+.cab .cnt{margin-left:auto;font-size:.75rem;color:var(--txt3);font-weight:600;}
+.cab-breadcrumb{display:flex;align-items:center;gap:0;margin-left:4px;flex:1;min-width:0;}
+.cab-breadcrumb a{text-decoration:none;font-size:.75rem;font-weight:600;color:var(--ac);transition:all var(--trans);padding:4px 10px;border-radius:6px;white-space:nowrap;}
+.cab-breadcrumb .sep{color:var(--txt3);font-size:.7rem;margin:0 2px;}
+.cab-breadcrumb .current{font-size:.75rem;font-weight:500;color:var(--txt2);white-space:nowrap;}
+
+.sidebar{position:fixed;left:0;top:var(--cab-h);width:var(--sidebar-w);height:calc(100vh - var(--cab-h));background:var(--bg2);border-right:1px solid var(--brd);padding:12px 0;overflow-y:auto;z-index:100;}
+.nav-item{display:flex;align-items:center;gap:8px;padding:10px 16px;font-size:.72rem;color:var(--txt3);cursor:pointer;transition:all var(--trans);border-left:3px solid transparent;font-weight:500;}
+.nav-item:hover{background:rgba(47,158,65,.08);color:var(--txt);}
+.nav-item.active{color:var(--ac);border-left-color:var(--ac);background:rgba(47,158,65,.1);font-weight:700;}
+
+.progress{position:fixed;bottom:0;left:var(--sidebar-w);right:0;height:3px;background:var(--brd);z-index:200;}
+.progress-fill{height:100%;background:var(--ac);transition:width .4s ease;width:0%;}
+
+.nav-arrows{position:fixed;bottom:24px;right:28px;display:flex;align-items:center;gap:14px;z-index:200;}
+.nav-btn{width:56px;height:56px;border-radius:50%;border:2px solid var(--brd);background:var(--bg2);color:var(--txt);font-size:1.5rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all var(--trans);box-shadow:0 2px 10px rgba(0,0,0,.3);}
+.nav-btn:hover:not(.disabled){border-color:var(--ac);color:var(--ac);background:rgba(47,158,65,.15);}
+.nav-btn.disabled{opacity:.2;cursor:default;}
+
+.slides-area{position:fixed;top:var(--cab-h);left:var(--sidebar-w);right:0;bottom:3px;overflow:hidden;}
+.slide{position:absolute;top:0;left:0;width:100%;height:100%;display:flex;flex-direction:column;padding:32px 44px 70px;opacity:0;transform:translateX(30px);transition:0.4s ease;pointer-events:none;overflow-y:auto;}
+.slide.active{opacity:1;transform:translateX(0);pointer-events:all;}
+.sc{max-width:900px;width:100%;margin:0 auto;}
+
+h1{font-size:2.2rem;font-weight:800;color:var(--tit);margin-bottom:16px;}
+h2{font-size:1.6rem;font-weight:700;color:var(--tit);margin-bottom:14px;}
+.label{font-size:.7rem;text-transform:uppercase;letter-spacing:3px;color:var(--ac);font-weight:700;margin-bottom:10px;}
+.dest{color:var(--ac);font-weight:800;}
+
+.txt{font-size:.95rem;line-height:1.8;color:var(--txt);margin-bottom:14px;text-align:justify;}
+.code-block{background:var(--bg3);border:1px solid var(--brd);border-radius:var(--rad);margin:14px 0;position:relative;}
+.code-header{display:flex;justify-content:space-between;padding:8px 16px;border-bottom:1px solid var(--brd);background:rgba(255,255,255,0.02);}
+.code-lang{font-size:.65rem;text-transform:uppercase;letter-spacing:1px;color:var(--txt3);}
+.copy-btn{background:none;border:1px solid var(--brd);color:var(--txt3);padding:2px 8px;border-radius:4px;font-size:.65rem;cursor:pointer;}
+.code-body{padding:16px;font-family:var(--mono);font-size:.85rem;line-height:1.6;color:#dcdcdc;overflow-x:auto;white-space:pre;}
+
+.it{display:flex;align-items:flex-start;gap:12px;background:var(--bg3);border:1px solid var(--brd);border-radius:var(--rad);padding:14px;margin-bottom:10px;}
+.it-icon{font-size:1.2rem;}
+
+.compilation-viz {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 30px 0;
+    gap: 10px;
+}
+.viz-step {
+    flex: 1;
+    background: var(--bg3);
+    border: 1px solid var(--brd);
+    padding: 15px 10px;
+    border-radius: var(--rad);
+    text-align: center;
+    font-size: 0.75rem;
+    position: relative;
+    transition: 0.3s;
+}
+.viz-step.active { border-color: var(--ac); background: var(--bg-dest); font-weight: bold; }
+.viz-arrow { color: var(--txt3); font-weight: bold; }
+
+.cards{display:flex;flex-wrap:wrap;gap:14px;margin:20px 0;}
+.card{background:var(--bg3);border:1px solid var(--brd);border-radius:var(--rad);padding:20px;flex:1;min-width:250px;}
+.card h4{color:var(--ac);margin-bottom:10px;}
+
+@media(max-width:800px){
+    .sidebar{display:none;}
+    :root{--sidebar-w:0px;}
+}
+</style>
+</head>
+<body>
+
+<div class="barra-if"></div>
+<div class="cab">
+  <img src="https://logodownload.org/wp-content/uploads/2014/10/ifrn-logo.png" alt="IFRN">
+  <div class="cab-breadcrumb">
+    <a href="#">Curso ADS</a>
+    <span class="sep">›</span>
+    <span class="current">Introdução ao C++</span>
+  </div>
+  <span class="cnt" id="counter">1/11</span>
+</div>
+
+<nav class="sidebar">
+  <div class="nav-item active" data-chapter="0" onclick="goTo(0)">🏠 Apresentação</div>
+  <div class="nav-item" data-chapter="1" onclick="goTo(1)">🧩 O que é Algoritmo?</div>
+  <div class="nav-item" data-chapter="2" onclick="goTo(2)">🚀 Aplicações e Relevância</div>
+  <div class="nav-item" data-chapter="3" onclick="goTo(3)">❓ O que é C++</div>
+  <div class="nav-item" data-chapter="4" onclick="goTo(4)">💻 Seu Primeiro Programa</div>
+  <div class="nav-item" data-chapter="5" onclick="goTo(5)">🛠️ Compilação</div>
+  <div class="nav-item" data-chapter="6" onclick="goTo(6)">📊 Variáveis e Tipos</div>
+  <div class="nav-item" data-chapter="7" onclick="goTo(7)">🔍 Processo de Compilação</div>
+  <div class="nav-item" data-chapter="8" onclick="goTo(8)">📝 Exercícios (1-5)</div>
+  <div class="nav-item" data-chapter="9" onclick="goTo(9)">📝 Exercícios (6-10)</div>
+  <div class="nav-item" data-chapter="10" onclick="goTo(10)">✅ Exercícios Resolvidos</div>
+</nav>
+
+<div class="progress"><div class="progress-fill" id="fill"></div></div>
+
+<div class="slides-area">
+
+<!-- CAP 0: TÍTULO -->
+<div class="slide active" data-chapter="0">
+  <div class="sc" style="text-align:center; padding-top: 10vh;">
+    <h3 class="label">Instituto Federal do Rio Grande do Norte</h3>
+    <h1>Introdução à Programação com <span class="dest">C++</span></h1>
+    <p class="txt" style="text-align:center;">Fundamentos, Sintaxe e Processamento de Baixo Nível.</p>
+    <div class="it" style="max-width: 500px; margin: 40px auto; text-align: left;">
+        <span class="it-icon">👨‍🏫</span>
+        <span><strong>Professor:</strong> Aluisio Igor<br><small>Curso de Análise e Desenvolvimento de Sistemas</small></span>
+    </div>
+  </div>
+</div>
+
+<!-- CAP 1: O QUE É ALGORITMO -->
+<div class="slide" data-chapter="1">
+  <div class="sc">
+    <h3 class="label">Fundamentos</h3>
+    <h2>O que é um <span class="dest">Algoritmo</span>?</h2>
+    <p class="txt">Antes de aprender C++, precisamos entender o conceito de algoritmo. Um algoritmo é uma <strong>sequência lógica, finita e definida de instruções</strong> que devem ser seguidas para resolver um problema ou executar uma tarefa.</p>
+    
+    <div class="it">
+        <span class="it-icon">🥘</span>
+        <span><strong>Analogia da Receita:</strong> Imagine uma receita de bolo. Ela tem uma lista de ingredientes (Entradas) e um passo a passo (Instruções) que resultam no bolo pronto (Saída). Isto é um algoritmo!</span>
+    </div>
+
+    <div class="cards">
+        <div class="card">
+            <h4>1. Entrada (Input)</h4>
+            <p class="txt" style="font-size: 0.85rem;">Os dados necessários para o algoritmo trabalhar (ex: os números que quer somar).</p>
+        </div>
+        <div class="card">
+            <h4>2. Processamento</h4>
+            <p class="txt" style="font-size: 0.85rem;">As regras e operações aplicadas aos dados de entrada para chegar a um resultado.</p>
+        </div>
+        <div class="card">
+            <h4>3. Saída (Output)</h4>
+            <p class="txt" style="font-size: 0.85rem;">O resultado final entregue pelo algoritmo após a execução das tarefas.</p>
+        </div>
+    </div>
+    
+    <p class="txt">Na computação, escrevemos algoritmos usando linguagens de programação para que o computador possa executá-los com altíssima velocidade.</p>
+  </div>
+</div>
+
+<!-- CAP 2: APLICAÇÕES -->
+<div class="slide" data-chapter="2">
+  <div class="sc">
+    <h3 class="label">Capítulo 1</h3>
+    <h2>Aplicações e <span class="dest">Relevância</span></h2>
+    <p class="txt">C++ não é apenas uma linguagem clássica; é o alicerce de sistemas que exigem o máximo de desempenho e controle de hardware.</p>
+    <div class="cards">
+        <div class="card">
+            <h4>🎮 Games</h4>
+            <p class="txt" style="font-size: 0.85rem;">Motores gráficos como a <strong>Unreal Engine</strong> são escritos em C++. Jogos AAA como GTA V e Elden Ring dependem dele.</p>
+        </div>
+        <div class="card">
+            <h4>💻 Sistemas</h4>
+            <p class="txt" style="font-size: 0.85rem;">Grandes partes do <strong>Windows, macOS e Linux</strong> são desenvolvidas em C++, além de navegadores como o Chrome.</p>
+        </div>
+        <div class="card">
+            <h4>🛰️ Aeroespacial</h4>
+            <p class="txt" style="font-size: 0.85rem;">Sistemas de controle de foguetes da <strong>SpaceX</strong> e da NASA utilizam C++ pela sua previsibilidade e velocidade.</p>
+        </div>
+    </div>
+    <div class="it">
+        <span class="it-icon">💡</span>
+        <span><strong>Destaque:</strong> Onde a performance é crítica e a latência deve ser mínima, o C++ é a escolha principal.</span>
+    </div>
+  </div>
+</div>
+
+<!-- CAP 3: O QUE É -->
+<div class="slide" data-chapter="3">
+  <div class="sc">
+    <h3 class="label">Capítulo 2</h3>
+    <h2>O que é o <span class="dest">C++</span>?</h2>
+    <p class="txt">Criado por <strong>Bjarne Stroustrup</strong> em 1979 (originalmente como "C com Classes"), o C++ é uma extensão da linguagem C que adicionou o paradigma de <strong>Programação Orientada a Objetos</strong>.</p>
+    <div class="it">
+        <span class="it-icon">⚙️</span>
+        <span><strong>Multiparadigma:</strong> Permite programar de forma procedural (como o C), orientada a objetos ou genérica.</span>
+    </div>
+    <div class="it">
+        <span class="it-icon">🏗️</span>
+        <span><strong>Baixo Nível com Abstração:</strong> Tem acesso direto à memória (ponteiros), mas também ferramentas modernas de alto nível.</span>
+    </div>
+  </div>
+</div>
+
+<!-- CAP 4: PRIMEIRO PROGRAMA -->
+<div class="slide" data-chapter="4">
+  <div class="sc">
+    <h3 class="label">Capítulo 3</h3>
+    <h2>Seu Primeiro <span class="dest">Programa</span></h2>
+    <p class="txt">Vamos analisar a estrutura básica de um código em C++ que exibe uma mensagem no terminal.</p>
+    <div class="code-block">
+        <div class="code-header"><span class="code-lang">cpp — hello.cpp</span><button class="copy-btn">Copiar</button></div>
+        <div class="code-body">#include &lt;iostream&gt; // Biblioteca de entrada e saída
+
+int main() {
+    // std::cout é usado para imprimir no ecrã
+    std::cout << "Olá, Mundo IFRN!" << std::endl;
+    
+    return 0; // Indica que o programa terminou com sucesso
+}</div>
+    </div>
+    <div class="it">
+        <span class="it-icon">🔍</span>
+        <span><strong>Nota:</strong> O <code>&lt;iostream&gt;</code> é necessário para usar o <code>cout</code>. Toda execução começa na função <code>main</code>.</span>
+    </div>
+  </div>
+</div>
+
+<!-- CAP 5: COMPILAR -->
+<div class="slide" data-chapter="5">
+  <div class="sc">
+    <h3 class="label">Capítulo 4</h3>
+    <h2>Como <span class="dest">Compilar</span></h2>
+    <p class="txt">C++ é uma linguagem <strong>compilada</strong>. Isto significa que o código humano precisa de ser traduzido para linguagem de máquina antes de rodar.</p>
+    <h4>Utilizando o Terminal (GCC/G++):</h4>
+    <div class="code-block">
+        <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn">Copiar</button></div>
+        <div class="code-body"># Compilar o ficheiro
+g++ hello.cpp -o meu_programa
+
+# Executar o programa
+./meu_programa</div>
+    </div>
+    <p class="txt" style="margin-top: 20px;">Também pode usar <strong>IDEs</strong> como: Visual Studio Code, Code::Blocks, CLion ou Dev-C++.</p>
+  </div>
+</div>
+
+<!-- CAP 6: VARIÁVEIS -->
+<div class="slide" data-chapter="6">
+  <div class="sc">
+    <h3 class="label">Capítulo 5</h3>
+    <h2>Variáveis e <span class="dest">Tipos de Dados</span></h2>
+    <p class="txt">C++ é fortemente tipado. Cada variável deve ter um tipo definido para que o compilador reserve o espaço correto na memória.</p>
+    <div class="code-block">
+        <div class="code-header"><span class="code-lang">cpp</span><button class="copy-btn">Copiar</button></div>
+        <div class="code-body">int idade = 20;            // Números inteiros
+double nota = 9.5;         // Números decimais (alta precisão)
+float peso = 70.2f;        // Números decimais (precisão simples)
+char inicial = 'J';        // Único caractere
+bool aprovado = true;      // Verdadeiro ou Falso
+std::string nome = "ADS";  // Cadeia de caracteres (texto)</div>
+    </div>
+    <div class="it">
+        <span class="it-icon">📏</span>
+        <span><strong>Tamanhos:</strong> Um <code>int</code> geralmente ocupa $4$ bytes, enquanto um <code>char</code> ocupa apenas $1$ byte.</span>
+    </div>
+  </div>
+</div>
+
+<!-- CAP 7: PROCESSO COMPILACAO -->
+<div class="slide" data-chapter="7">
+  <div class="sc">
+    <h3 class="label">Capítulo 6</h3>
+    <h2>O Ciclo da <span class="dest">Compilação</span></h2>
+    <p class="txt">O que acontece entre o "guardar" e o "executar"? O processo é dividido em quatro etapas principais:</p>
+    
+    <div class="compilation-viz">
+        <div class="viz-step"><strong>1. Pré-processador</strong><br><small>Resolve #includes e macros</small></div>
+        <div class="viz-arrow">→</div>
+        <div class="viz-step"><strong>2. Compilador</strong><br><small>Gera código Assembly</small></div>
+        <div class="viz-arrow">→</div>
+        <div class="viz-step"><strong>3. Montador</strong><br><small>Gera código objeto (binário)</small></div>
+        <div class="viz-arrow">→</div>
+        <div class="viz-step"><strong>4. Linker</strong><br><small>Une bibliotecas e gera o EXE</small></div>
+    </div>
+
+    <div class="it">
+        <span class="it-icon">🛠️</span>
+        <span><strong>Linguagem de Máquina:</strong> No final do processo, temos apenas zeros e uns ($0101$) que o processador consegue interpretar diretamente.</span>
+    </div>
+  </div>
+</div>
+
+<!-- CAP 8: EXERCICIOS 1-5 -->
+<div class="slide" data-chapter="8">
+  <div class="sc">
+    <h3 class="label">Capítulo 7</h3>
+    <h2>Exercícios <span class="dest">Práticos (1 a 5)</span></h2>
+    <div class="items">
+        <div class="it"><span><strong>1.</strong> Crie um programa que imprima o seu nome completo e a sua idade.</span></div>
+        <div class="it"><span><strong>2.</strong> Receba dois números inteiros e exiba a soma deles.</span></div>
+        <div class="it"><span><strong>3.</strong> Calcule a média aritmética de quatro notas informadas pelo utilizador.</span></div>
+        <div class="it"><span><strong>4.</strong> Receba um número e informe se é par ou ímpar (Dica: use o operador %).</span></div>
+        <div class="it"><span><strong>5.</strong> Converta uma temperatura de Celsius para Fahrenheit ($F = C \times 1.8 + 32$).</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- CAP 9: EXERCICIOS 6-10 -->
+<div class="slide" data-chapter="9">
+  <div class="sc">
+    <h3 class="label">Capítulo 7</h3>
+    <h2>Exercícios <span class="dest">Práticos (6 a 10)</span></h2>
+    <div class="items">
+        <div class="it"><span><strong>6.</strong> Calcule a área de um círculo ($Area = \pi \times r^2$). Use <code>3.14159</code> para $\pi$.</span></div>
+        <div class="it"><span><strong>7.</strong> Receba o valor de um produto e aplique 10% de desconto.</span></div>
+        <div class="it"><span><strong>8.</strong> Crie um programa que troque os valores de duas variáveis <code>A</code> e <code>B</code>.</span></div>
+        <div class="it"><span><strong>9.</strong> Receba um número e exiba o seu sucessor e o seu antecessor.</span></div>
+        <div class="it"><span><strong>10.</strong> Leia o salário de um funcionário e calcule o novo salário com 15% de aumento.</span></div>
+    </div>
+    <div class="it" style="background: rgba(47,158,65,0.1); border-color: var(--ac);">
+        <span class="it-icon">🚀</span>
+        <span><strong>Dica do Professor:</strong> Pratique a digitação do código. Evite copiar e colar para fortalecer a memória muscular!</span>
+    </div>
+  </div>
+</div>
+
+<!-- CAP 10: EXERCICIOS RESOLVIDOS -->
+<div class="slide" data-chapter="10">
+  <div class="sc">
+    <h3 class="label">Soluções</h3>
+    <h2>Exercícios <span class="dest">Resolvidos</span></h2>
+    <p class="txt">Abaixo estão as resoluções comentadas para os exercícios 3, 5 e 7.</p>
+
+    <h4>Exercício 3: Média de 4 notas</h4>
+    <div class="code-block">
+        <div class="code-header"><span class="code-lang">cpp</span><button class="copy-btn">Copiar</button></div>
+        <div class="code-body">#include &lt;iostream&gt;
+
+int main() {
+    float n1, n2, n3, n4, media;
+    std::cout << "Digite as 4 notas separadas por espaco: ";
+    std::cin >> n1 >> n2 >> n3 >> n4;
+    
+    media = (n1 + n2 + n3 + n4) / 4;
+    
+    std::cout << "A media aritmetica e: " << media << std::endl;
+    return 0;
+}</div>
+    </div>
+
+    <h4>Exercício 5: Celsius para Fahrenheit</h4>
+    <div class="code-block">
+        <div class="code-header"><span class="code-lang">cpp</span><button class="copy-btn">Copiar</button></div>
+        <div class="code-body">#include &lt;iostream&gt;
+
+int main() {
+    float celsius, fahrenheit;
+    std::cout << "Digite a temperatura em Celsius: ";
+    std::cin >> celsius;
+    
+    fahrenheit = (celsius * 1.8) + 32;
+    
+    std::cout << "Temperatura em Fahrenheit: " << fahrenheit << std::endl;
+    return 0;
+}</div>
+    </div>
+
+    <h4>Exercício 7: Desconto de 10%</h4>
+    <div class="code-block">
+        <div class="code-header"><span class="code-lang">cpp</span><button class="copy-btn">Copiar</button></div>
+        <div class="code-body">#include &lt;iostream&gt;
+
+int main() {
+    float precoOriginal, precoComDesconto;
+    std::cout << "Digite o preco do produto: ";
+    std::cin >> precoOriginal;
+    
+    precoComDesconto = precoOriginal * 0.90; // 0.90 equivale a retirar 10%
+    
+    std::cout << "O valor com 10% de desconto e: R$ " << precoComDesconto << std::endl;
+    return 0;
+}</div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<!-- NAV ARROWS -->
+<div class="nav-arrows">
+  <button class="nav-btn" id="btnPrev">&#8592;</button>
+  <button class="nav-btn" id="btnNext">&#8594;</button>
+</div>
+
+<script>
+// Funcionalidade do botão copiar
+document.querySelectorAll('.copy-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    const code = this.closest('.code-block').querySelector('.code-body').textContent;
+    const el = document.createElement('textarea');
+    el.value = code;
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand('copy');
+    document.body.removeChild(el);
+    this.textContent = 'Copiado!';
+    setTimeout(() => { this.textContent = 'Copiar'; }, 2000);
+  });
+});
+
+const slides = document.querySelectorAll('.slide'),
+      navs = document.querySelectorAll('.nav-item'),
+      ctr = document.getElementById('counter'),
+      fill = document.getElementById('fill'),
+      btnPrev = document.getElementById('btnPrev'),
+      btnNext = document.getElementById('btnNext');
+
+let cur = 0;
+const total = slides.length;
+
+function go(n) {
+  if (n < 0 || n >= total) return;
+  slides[cur].classList.remove('active');
+  cur = n;
+  slides[cur].classList.add('active');
+  ctr.textContent = (cur + 1) + '/' + total;
+  fill.style.width = ((cur + 1) / total * 100) + '%';
+  
+  const ch = slides[cur].dataset.chapter;
+  navs.forEach(v => { v.classList.toggle('active', v.dataset.chapter === ch); });
+  
+  btnPrev.classList.toggle('disabled', cur === 0);
+  btnNext.classList.toggle('disabled', cur === total - 1);
+  slides[cur].scrollTop = 0;
+}
+
+function goTo(ch) {
+  for (let i = 0; i < total; i++) {
+    if (slides[i].dataset.chapter == ch) { go(i); return; }
+  }
+}
+
+btnPrev.addEventListener('click', () => go(cur - 1));
+btnNext.addEventListener('click', () => go(cur + 1));
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === ' ') go(cur + 1);
+  if (e.key === 'ArrowLeft') go(cur - 1);
+});
+
+go(0);
+</script>
+</body>
+</html>
